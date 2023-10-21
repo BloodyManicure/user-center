@@ -1,12 +1,14 @@
 package com.lawrence.usercenter.service;
-import java.util.Date;
 
 import com.lawrence.usercenter.model.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
+
+import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +23,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void testAddUser() {
+    void testAddUser() {
         User user = new User();
         user.setUsername("mch");
         user.setUserAccount("admin");
@@ -34,5 +36,20 @@ public class UserServiceTest {
         boolean result = userService.save(user);
         System.out.println(user.getId());
         assertTrue(result);
+    }
+
+    @Test
+    void testDigest() throws NoSuchAlgorithmException {
+        String newPassword = DigestUtils.md5DigestAsHex(("123456" + "mypassword").getBytes());
+        System.out.println(newPassword);
+    }
+
+    @Test
+    void userRegister() {
+        String userAccount = "mjcheng";
+        String userPassword = "12345678";
+        String checkPassword = "12345678";
+        long res = userService.userRegister(userAccount, userPassword, checkPassword);
+        System.out.println(res);
     }
 }
